@@ -12,4 +12,4 @@ George Wen
     aws athena update-work-group     --work-group primary  --configuration-updates '{"ResultConfigurationUpdates": {"OutputLocation": "s3://aws-test-ggww/"}}'
 2. Grant lambda IAM role permission to call comprehend api (in cf template).
 3. Update lambda function to call comprehend sement (in cf template)
-4. add crawler to update the table partition for newly arrived files
+4. Add crawler to update the table partitions for newly arrived files, possibly to be triggered by s3 events
