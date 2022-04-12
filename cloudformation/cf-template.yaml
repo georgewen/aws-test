@@ -72,9 +72,15 @@ Resources:
              dateTimeObj = datetime.now()
              strDateTime = dateTimeObj.isoformat(sep=' ', timespec='milliseconds')
 
+             # George Wen: add api call to comprehend sentiment detection
+             comprehend = boto3.client(service_name='comprehend', region_name='us-east-1')
+             sentimentResult = comprehend.detect_sentiment(Text=response, LanguageCode='en')
+             sentimentResultText = sentimentResult['Sentiment']
+             print(json.dumps(sentimentResult,sort_keys=True, indent=4))
+            
              candidateRecord = {}
              candidateRecord['candidate'] = candidate
-             candidateRecord['sentiment'] = 'NEUTRAL'
+             candidateRecord['sentiment'] = sentimentResultText
              candidateRecord['datetime'] = strDateTime
 
              recordBytes = json.dumps(candidateRecord).encode('utf-8')
@@ -91,6 +97,12 @@ Resources:
                 {
                     'MetricName': 'Sentiment',
                     'Timestamp': dateTimeObj,
+                    'Dimensions': [
+                        {
+                          'Name': 'Sentiment',
+                          'Value': sentimentResultText
+                        }
+                    ],
                     'Values': [
                         1.0,
                     ],
@@ -325,10 +337,26 @@ Resources:
     Properties:
       DashboardName: New-Starter-Dashboard
       DashboardBody: >-
-        { "widgets": [ { "type": "metric", "x": 0, "y": 0, "width": 24,
-        "height": 6, "properties": { "metrics": [ [ "NewStarter", "Sentiment", {
-        "period": 60, "id": "m3", "stat": "SampleCount" } ] ], "view":
-        "timeSeries", "stacked": false, "region": "ap-southeast-2", "start":
-        "-PT1H", "end": "P0D", "title": "Sentiment API Volume of Calls" } } ] }
-
+        {
+            "widgets": [
+                {
+                    "height": 7,
+                    "width": 18,
+                    "y": 0,
+                    "x": 0,
+                    "type": "metric",
+                    "properties": {
+                        "view": "timeSeries",
+                        "stacked": false,
+                        "metrics": [
+                            [ "NewStarter", "Sentiment", "Sentiment", "NEGATIVE" ],
+                            [ "...", "POSITIVE" ],
+                            [ "...", "MIXED" ],
+                            [ "...", "NEUTRAL" ]
+                        ],
+                        "region": "us-east-1"
+                    }
+                }
+            ]
+        }
 
