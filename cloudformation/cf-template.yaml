@@ -29,7 +29,7 @@ Resources:
         application/json: !Ref SentimentModel
       MethodResponses:
         - ResponseModels:
-            application/json: Empty
+            application/json: !Ref SentimentResponseModel
           ResponseParameters:
             method.response.header.Location: true
           StatusCode: 200
@@ -123,7 +123,12 @@ Resources:
                    'Data': recordBytes
                  }
                )
-            
+
+             return {
+                        'statusCode': 200,
+                        'body': json.dumps(candidateRecord)
+                    }    
+
       Description: Sentiment function tech challenge
       Handler: index.lambda_handler
       MemorySize: 128
@@ -198,6 +203,7 @@ Resources:
     DependsOn:
       - POSTMethod
       - SentimentModel
+      - SentimentResponseModel
       - SentimentAPI
       - SentimentFunction
   S3Delivery:
@@ -331,6 +337,22 @@ Resources:
           candidate:
             type: string
           response:
+            type: string
+  SentimentResponseModel:
+    Type: 'AWS::ApiGateway::Model'
+    Properties:
+      RestApiId: !Ref SentimentAPI
+      ContentType: application/json
+      Name: SentimentResponseModel
+      Schema:
+        title: SentimentResponse
+        type: object
+        properties:
+          candidate:
+            type: string
+          sentiment:
+            type: string
+          datetime:
             type: string
   SentimentDashboard:
     Type: 'AWS::CloudWatch::Dashboard'

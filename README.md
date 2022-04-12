@@ -13,3 +13,5 @@ George Wen
 2. Grant lambda IAM role permission to call comprehend api (in cf template).
 3. Update lambda function to call comprehend sement (in cf template)
 4. Add crawler to update the table partitions for newly arrived files, possibly to be triggered by s3 events
+5. testing: can be done manually thr api gateway UI and lambda function UI, can also write automated unit testing using python utest.
+6. Security: considering restricting IAM roles access to specific action and specific resource when possible. 
