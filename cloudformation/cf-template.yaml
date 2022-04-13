@@ -125,10 +125,7 @@ Resources:
                  }
                )
 
-             return {
-                        'statusCode': 200,
-                        'body': json.dumps(candidateRecord)
-                    }    
+             return  json.dumps(candidateRecord)
 
       Description: Sentiment function tech challenge
       Handler: index.lambda_handler
