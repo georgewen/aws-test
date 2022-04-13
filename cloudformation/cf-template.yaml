@@ -46,8 +46,9 @@ Resources:
               - Arn
             - /invocations
         IntegrationResponses:
-          - ResponseTemplates:
-              application/json: '{}'
+          -
+          #- ResponseTemplates:
+             # application/json: '{}'
             ResponseParameters:
               method.response.header.Location: integration.response.body.headers.uid
             StatusCode: 200
