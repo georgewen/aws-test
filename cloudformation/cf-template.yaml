@@ -74,7 +74,7 @@ Resources:
              strDateTime = dateTimeObj.isoformat(sep=' ', timespec='milliseconds')
 
              # George Wen: add api call to comprehend sentiment detection
-             comprehend = boto3.client(service_name='comprehend', region_name='us-east-1')
+             comprehend = boto3.client(service_name='comprehend', region_name=os.environ['AWS_REGION'])
              sentimentResult = comprehend.detect_sentiment(Text=response, LanguageCode='en')
              sentimentResultText = sentimentResult['Sentiment']
              print(json.dumps(sentimentResult,sort_keys=True, indent=4))
